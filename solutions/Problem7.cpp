@@ -7,55 +7,39 @@ Answer: 104743
 
 
 #include <iostream>
-#include <random>
 #include <cmath>
-#include <ctime>
 
-size_t modularPow(size_t base, size_t exponent, size_t modulus) {
-    size_t result = 1;
-    while(exponent) {
-        if((exponent&1) == 1) {
-            result = base*result % modulus;
-        }
-        exponent >>= 1;
-        base = base*base % modulus;
-    }
-    return result;
-}
-bool isPrime(size_t number, int accuracy = 5) {
-    std::mt19937 gen(static_cast<unsigned int>(std::time(nullptr)));
-    if((number == 2) || (number == 3))
-        return true;
-    if((number <= 1) || !(number&1))
+bool isPrime(int n) {
+    if(n == 1)
         return false;
-    size_t sc = 0;
-    for(size_t n = number-1; !(n&1); ++sc, n >>= 1);
-
-    size_t dc = (number-1) / (1<<sc);
-    for(int i = 0; i < accuracy; ++i) {
-        std::uniform_int_distribution<> dis(2,number-2);
-        size_t ac = dis(gen);
-        size_t xc = modularPow(ac,dc,number);
-
-        if((xc == 1) || (xc == number-1))
-            continue;
-        for(unsigned int k = 1; k <= sc-1; ++k) {
-            xc = modularPow(xc,2,number);
-            if(xc == 1)
+    else if(n < 4.0)
+        return true;
+    else if(n % 2 == 0)
+        return false;
+    else if(n < 9)
+        return true;
+    else if (n % 3 == 0)
+        return false;
+    else {
+        int r = floor(sqrt(static_cast<double>(n)));
+        int f = 5;
+        while (f <= r) {
+            if (n % f == 0) {
                 return false;
-            if(xc == number-1)
-                goto LOOP;
+                 }
+            if (n % (f+2) == 0) {
+                return false;
+                }
+            f = f+6;
         }
-    return false;
-    LOOP:
-        continue;
+    return true;
     }
-return true;
+
 }
 
 int main() {
-    size_t total = 0;
-    for(int i = 0; i < 140000; i++) {
+    size_t total = 1;
+    for(int i = 3; i < 140000; i++) {
         if(isPrime(i))
             ++total;
         if(total == 10001) {
