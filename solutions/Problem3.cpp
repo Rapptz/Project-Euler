@@ -7,8 +7,8 @@ Answer: 6857
 
 #include <iostream>
 
-size_t largestPrimeFactor(size_t number) {
-    for(size_t i = 2; i <= 100000; i++) {
+unsigned long long largestPrimeFactor(unsigned long long number) {
+    for(unsigned long long i = 2; i <= 100000; i++) {
         while(number % i == 0) {
             number /= i;
             if(number == 1 || number == i)
